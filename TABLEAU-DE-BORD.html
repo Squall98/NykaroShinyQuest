@@ -1,0 +1,307 @@
+<!-- Nykaro's Shiny Quest — tableau de bord de developpement.
+     Pour garder le MEME lien a chaque mise a jour : republier avec l'outil Artifact
+     en passant l'url existant.
+     Lien : https://claude.ai/code/artifact/9159b5ef-fcc9-42ea-8fdc-62882dd09232 -->
+<title>Nykaro's Shiny Quest — tableau de bord</title>
+
+<style>
+  :root {
+    --ground:#EEECF7; --surface:#F8F7FC; --surface-alt:#E7E3F5; --line:#D2CCEA;
+    --ink:#1B1830; --ink-soft:#514B6E; --ink-faint:#867FA0;
+    --accent:#6D4AE0; --accent-bg:#ECE6FF; --accent-ink:#3A2585;
+    --warn:#B23F6A; --warn-bg:#F6DCE6;
+    --ok:#2E8B57; --ok-bg:#DcF3E6;
+    --radius:8px; --shadow:0 1px 2px rgba(30,20,60,.06), 0 6px 20px rgba(60,40,120,.08);
+    --display:"Trebuchet MS",Verdana,Geneva,sans-serif;
+    --body:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    --mono:ui-monospace,"Cascadia Code",Consolas,"DejaVu Sans Mono",monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground:#131024; --surface:#1C1836; --surface-alt:#272146; --line:#3A3163;
+      --ink:#ECE9FA; --ink-soft:#B4ACD6; --ink-faint:#847CA8;
+      --accent:#9B87FF; --accent-bg:#2A2350; --accent-ink:#CFC4FF;
+      --warn:#F09AB8; --warn-bg:#3A2233; --ok:#7FD9A6; --ok-bg:#22392C;
+      --shadow:0 1px 2px rgba(0,0,0,.35), 0 6px 20px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#131024; --surface:#1C1836; --surface-alt:#272146; --line:#3A3163;
+    --ink:#ECE9FA; --ink-soft:#B4ACD6; --ink-faint:#847CA8;
+    --accent:#9B87FF; --accent-bg:#2A2350; --accent-ink:#CFC4FF;
+    --warn:#F09AB8; --warn-bg:#3A2233; --ok:#7FD9A6; --ok-bg:#22392C;
+  }
+  :root[data-theme="light"] {
+    --ground:#EEECF7; --surface:#F8F7FC; --surface-alt:#E7E3F5; --line:#D2CCEA;
+    --ink:#1B1830; --ink-soft:#514B6E; --ink-faint:#867FA0;
+    --accent:#6D4AE0; --accent-bg:#ECE6FF; --accent-ink:#3A2585;
+    --warn:#B23F6A; --warn-bg:#F6DCE6; --ok:#2E8B57; --ok-bg:#DcF3E6;
+  }
+
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink); font-family:var(--body); line-height:1.55; font-size:16px; }
+  .wrap { max-width:1060px; margin:0 auto; padding:28px 20px 64px; }
+
+  header.top { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:20px; }
+  header.top h1 { font-family:var(--display); font-size:1.9rem; margin:0 0 4px; letter-spacing:-.01em;
+                  background:linear-gradient(90deg,var(--accent),#38C6D9); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  header.top .sub { color:var(--ink-soft); font-size:.95rem; }
+  .maj { color:var(--ink-faint); font-size:.8rem; }
+
+  .tabs { display:flex; flex-wrap:wrap; gap:4px; border-bottom:1px solid var(--line); margin-bottom:22px; }
+  .tabs button { appearance:none; border:0; background:transparent; color:var(--ink-soft); font-family:var(--body);
+                 font-size:.92rem; font-weight:600; padding:9px 14px; border-radius:var(--radius) var(--radius) 0 0; cursor:pointer; position:relative; }
+  .tabs button:hover { color:var(--ink); background:var(--surface); }
+  .tabs button[aria-selected="true"] { color:var(--accent-ink); background:var(--surface); }
+  .tabs button[aria-selected="true"]::after { content:""; position:absolute; left:8px; right:8px; bottom:-1px; height:2px; background:var(--accent); border-radius:2px; }
+
+  .panel { display:none; animation:fade .18s ease; }
+  .panel.on { display:block; }
+  @keyframes fade { from { opacity:0; transform:translateY(3px); } to { opacity:1; transform:none; } }
+
+  section { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 22px; margin-bottom:18px; }
+  h2 { font-family:var(--display); font-size:1.3rem; margin:0 0 10px; }
+  h3.sub { font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-faint); margin:20px 0 8px; }
+  p.lede { color:var(--ink-soft); margin:0 0 14px; }
+  code { font-family:var(--mono); font-size:.86em; background:var(--surface-alt); padding:1px 5px; border-radius:4px; }
+  pre { background:var(--surface-alt); border:1px solid var(--line); border-radius:var(--radius); padding:12px 14px; overflow-x:auto; font-family:var(--mono); font-size:.82rem; line-height:1.5; }
+  a { color:var(--accent); }
+  ul { margin:.4em 0; padding-left:1.2em; } li { margin:.25em 0; }
+
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin:6px 0 4px; }
+  .chip { background:var(--surface-alt); border:1px solid var(--line); border-radius:var(--radius); padding:12px 14px; }
+  .chip b { display:block; font-size:1.05rem; } .chip span { color:var(--ink-soft); font-size:.85rem; }
+
+  .callout { border-left:3px solid var(--accent); background:var(--accent-bg); border-radius:0 var(--radius) var(--radius) 0; padding:12px 16px; margin:12px 0; }
+  .callout--warn { border-left-color:var(--warn); background:var(--warn-bg); }
+  .callout p { margin:.3em 0; }
+
+  .tag { display:inline-block; font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; padding:2px 8px; border-radius:20px; background:var(--accent-bg); color:var(--accent-ink); }
+  .tag.ok { background:var(--ok-bg); color:var(--ok); } .tag.wip { background:var(--warn-bg); color:var(--warn); } .tag.todo { background:var(--surface-alt); color:var(--ink-faint); }
+
+  .scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:8px 0; border-radius:var(--radius); }
+  table { border-collapse:collapse; width:100%; font-size:.9rem; min-width:520px; }
+  th, td { text-align:left; padding:8px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--ink-faint); font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; }
+  tr:last-child td { border-bottom:0; }
+
+  .theme-btn { appearance:none; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft); border-radius:20px; padding:5px 12px; font-size:.8rem; cursor:pointer; }
+  .theme-btn:hover { color:var(--ink); }
+  .bar { height:8px; background:var(--surface-alt); border-radius:20px; overflow:hidden; margin-top:6px; }
+  .bar > i { display:block; height:100%; background:linear-gradient(90deg,var(--accent),#38C6D9); }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>✨ Nykaro's Shiny Quest</h1>
+      <div class="sub">Mod Fabric original pour Cobblemon — tableau de bord de développement</div>
+    </div>
+    <div style="text-align:right">
+      <button class="theme-btn" id="themeToggle" type="button">Thème clair / sombre</button>
+      <div class="maj">Mis à jour : 26 juillet 2026</div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" aria-selected="true"  data-cible="apercu">Vue d'ensemble</button>
+    <button role="tab" aria-selected="false" data-cible="features">Fonctionnalités</button>
+    <button role="tab" aria-selected="false" data-cible="suivi">Suivi</button>
+    <button role="tab" aria-selected="false" data-cible="archi">Architecture</button>
+    <button role="tab" aria-selected="false" data-cible="textures">Textures IA</button>
+    <button role="tab" aria-selected="false" data-cible="github">Publication GitHub</button>
+  </nav>
+
+  <!-- ===================== VUE D'ENSEMBLE ===================== -->
+  <div class="panel on" id="apercu">
+    <section>
+      <h2>Où en est le projet ?</h2>
+      <p class="lede">Mod <b>100% original</b> écrit from scratch (aucune ligne du mod de Trey), qui reprend le concept « chances de shiny qui montent avec des quêtes » — publiable librement sous licence MIT.</p>
+      <div class="grid">
+        <div class="chip"><b>1.21.1</b><span>Minecraft ciblé</span></div>
+        <div class="chip"><b>Fabric</b><span>Loader 0.16.9+</span></div>
+        <div class="chip"><b>Cobblemon 1.6+</b><span>dépendance</span></div>
+        <div class="chip"><b>MIT</b><span>licence</span></div>
+        <div class="chip"><b>FR + EN</b><span>traductions</span></div>
+        <div class="chip"><b>19 fichiers</b><span>code Java écrit</span></div>
+      </div>
+      <h3 class="sub">Avancement global</h3>
+      <div class="bar"><i style="width:85%"></i></div>
+      <p class="lede" style="margin-top:8px">✅ <b>Le mod compile et s'empaquette</b> (jar <code>1.0.0</code> produit, build réussi en 9m32) · restent : test en jeu, textures, mise en ligne GitHub.</p>
+      <div class="callout"><p><b>Concept :</b> tes chances de shiny démarrent à 0 et montent à chaque palier de quêtes complété, de <b>2%</b> jusqu'à <b>100%</b>.</p></div>
+    </section>
+    <section>
+      <h2>Les 6 paliers</h2>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Palier</th><th>Nom</th><th>Chances de shiny</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Premiers pas</td><td>2 %</td></tr>
+            <tr><td>2</td><td>Apprenti Dresseur</td><td>5 %</td></tr>
+            <tr><td>3</td><td>Chasseur aguerri</td><td>10 %</td></tr>
+            <tr><td>4</td><td>Expert Cobblemon</td><td>25 %</td></tr>
+            <tr><td>5</td><td>Maître de la Chasse</td><td>50 %</td></tr>
+            <tr><td>6</td><td>Légende Chromatique</td><td>100 %</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="lede" style="margin-top:10px">18 quêtes au total (3 par palier), toutes configurables. Valeurs modifiables dans <code>config/nykaroshiny.json</code>.</p>
+    </section>
+  </div>
+
+  <!-- ===================== FONCTIONNALITÉS ===================== -->
+  <div class="panel" id="features">
+    <section>
+      <h2>Fonctionnalités</h2>
+      <p class="lede">Toutes les fonctionnalités demandées ont été <b>codées</b>. Statut = état vis-à-vis de la compilation/test.</p>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Fonctionnalité</th><th>Statut</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td>Quêtes progressives (6 paliers × 3)</td><td><span class="tag ok">Codé</span></td><td>Design original, piloté par événements</td></tr>
+            <tr><td>Montée des chances de shiny</td><td><span class="tag ok">Codé</span></td><td>Override au spawn via l'API Cobblemon</td></tr>
+            <tr><td>Progression par joueur</td><td><span class="tag ok">Codé</span></td><td>Option globale via config</td></tr>
+            <tr><td>Fichier de configuration JSON</td><td><span class="tag ok">Codé</span></td><td>Courbe d'odds, objectifs, options</td></tr>
+            <tr><td>Interface graphique des quêtes</td><td><span class="tag ok">Codé</span></td><td>Raccourci clavier (G). Rendu texte, textures à venir</td></tr>
+            <tr><td>HUD chances de shiny</td><td><span class="tag ok">Codé</span></td><td>Affichage haut-gauche</td></tr>
+            <tr><td>Feedback son + particules</td><td><span class="tag ok">Codé</span></td><td>Quête terminée / montée de palier</td></tr>
+            <tr><td>Commandes /shinyquest</td><td><span class="tag ok">Codé</span></td><td>odds · progress · set · reset</td></tr>
+            <tr><td>Traductions FR + EN</td><td><span class="tag ok">Codé</span></td><td>Fichiers de langue complets</td></tr>
+            <tr><td>Compilation (build Gradle)</td><td><span class="tag ok">Réussi</span></td><td>jar 1.0.0 produit du premier coup</td></tr>
+            <tr><td>Test en jeu réel</td><td><span class="tag todo">À faire</span></td><td>Prochaine étape : instance Fabric + Cobblemon</td></tr>
+            <tr><td>Textures / visuels IA</td><td><span class="tag todo">À faire</span></td><td>Prompts fournis (onglet Textures)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================== SUIVI ===================== -->
+  <div class="panel" id="suivi">
+    <section>
+      <h2>Feuille de route</h2>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Phase</th><th>Statut</th><th>Détail</th></tr></thead>
+          <tbody>
+            <tr><td>0 · Décisions & cadrage</td><td><span class="tag ok">Fait</span></td><td>Nom, licence MIT, périmètre, approche originale</td></tr>
+            <tr><td>1 · Ossature projet</td><td><span class="tag ok">Fait</span></td><td>Gradle, Fabric, CI GitHub, docs, licence</td></tr>
+            <tr><td>2 · Code serveur + client</td><td><span class="tag ok">Fait</span></td><td>19 fichiers Java, quêtes, odds, réseau, GUI, HUD</td></tr>
+            <tr><td>3 · Pont Cobblemon</td><td><span class="tag ok">Fait</span></td><td>Écrit ; accesseurs à valider au 1er build</td></tr>
+            <tr><td>4 · Compilation & correction</td><td><span class="tag ok">Fait</span></td><td>Build réussi en 9m32, jar 1.0.0 produit</td></tr>
+            <tr><td>5 · Test en jeu</td><td><span class="tag wip">Suivante</span></td><td>Instance Fabric + Cobblemon + FLK</td></tr>
+            <tr><td>6 · Textures IA</td><td><span class="tag todo">À faire</span></td><td>Générer via prompts, intégrer au GUI</td></tr>
+            <tr><td>7 · Publication GitHub</td><td><span class="tag todo">À faire</span></td><td>Repo public + release (jar)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout callout--warn"><p><b>En attente de toi :</b> ton <b>pseudo GitHub</b> (pour finaliser les liens du repo et la CI) et le feu vert pour créer le dépôt public.</p></div>
+    </section>
+  </div>
+
+  <!-- ===================== ARCHITECTURE ===================== -->
+  <div class="panel" id="archi">
+    <section>
+      <h2>Choix d'architecture</h2>
+      <ul>
+        <li><b>Sans mixin</b> — toute la progression passe par les <b>événements publics</b> de Cobblemon (capture, combat, évolution, niveau, spawn). Plus propre et plus robuste aux mises à jour.</li>
+        <li><b>Pont isolé</b> — un seul fichier (<code>CobblemonBridge.java</code>) touche à l'API Cobblemon. Tout le reste compile indépendamment.</li>
+        <li><b>Progression = agrégats</b> — on stocke des compteurs simples (captures, défaites, types, niveau max…) ; les quêtes se calculent à la volée. Sauvegarde légère.</li>
+        <li><b>Sync réseau JSON</b> — le serveur envoie un instantané compact au client pour le HUD et le GUI.</li>
+      </ul>
+      <h3 class="sub">Arborescence</h3>
+      <pre>NykaroShinyQuest/
+├─ build.gradle · settings.gradle · gradle.properties
+├─ .github/workflows/build.yml      (build + release auto)
+├─ README.md · LICENSE (MIT) · CHANGELOG.md · .gitignore
+├─ TABLEAU-DE-BORD.html             (ce document)
+└─ src/main/
+   ├─ java/fr/nykaro/shinyquest/
+   │  ├─ NykaroShinyQuest.java       (init principal)
+   │  ├─ config/       ShinyQuestConfig
+   │  ├─ quest/        QuestType · Quest · Tier · QuestRegistry · PlayerQuestData
+   │  ├─ odds/         ShinyOddsService
+   │  ├─ progression/  ProgressionManager
+   │  ├─ command/      ShinyQuestCommand
+   │  ├─ network/      Snapshot · SnapshotPayload · NetworkHandler
+   │  ├─ integration/  CobblemonBridge   (← seul couplage Cobblemon)
+   │  ├─ util/         QuestStateManager  (sauvegarde monde)
+   │  └─ client/       ClientState · client init · hud/ · gui/
+   └─ resources/
+      ├─ fabric.mod.json
+      └─ assets/nykaroshiny/  lang (fr/en) · icon · textures/gui</pre>
+    </section>
+  </div>
+
+  <!-- ===================== TEXTURES ===================== -->
+  <div class="panel" id="textures">
+    <section>
+      <h2>Prompts IA pour les visuels</h2>
+      <p class="lede">Génère ces images, envoie-les moi, je les intègre. Format PNG, fond transparent recommandé (sauf l'icône).</p>
+
+      <h3 class="sub">1 · Icône du mod (128×128, carré)</h3>
+      <pre>A polished game mod icon, 128x128, square. A glowing sparkle/shiny star
+symbol (Pokemon shiny style, four-point sparkle) in cyan and white,
+centered over a deep purple-to-navy night gradient background. Subtle
+magic glow, clean vector-like shading, high contrast, no text.
+Crisp edges, app-icon quality.</pre>
+
+      <h3 class="sub">2 · Fond du menu des quêtes (256×200, GUI)</h3>
+      <pre>A Minecraft-style GUI panel background, flat and clean, 256x200.
+Dark violet parchment / arcane tablet look with a thin glowing cyan
+border, faint sparkle motifs in the corners. Pixel-art friendly,
+readable behind text, no words, subtle so text stays legible.</pre>
+
+      <h3 class="sub">3 · Badges de palier (32×32, ×6)</h3>
+      <pre>A set of 6 small circular tier badges, 32x32 each, pixel-art style,
+matching a Pokemon shiny theme. Progressive rarity: bronze, silver,
+gold, emerald, sapphire, prismatic rainbow. Each with a small sparkle,
+clean outline, transparent background, no text.</pre>
+
+      <h3 class="sub">4 · Icône HUD étincelle (16×16)</h3>
+      <pre>A tiny 16x16 pixel-art shiny sparkle icon, cyan/white four-point star,
+transparent background, crisp Minecraft HUD style.</pre>
+      <div class="callout"><p>Dis-moi le style que tu préfères (pixel-art strict vs semi-réaliste) et j'ajuste les prompts. Une fois les images prêtes, je les place dans <code>assets/nykaroshiny/textures/</code> et je branche le GUI dessus.</p></div>
+    </section>
+  </div>
+
+  <!-- ===================== GITHUB ===================== -->
+  <div class="panel" id="github">
+    <section>
+      <h2>Mise en ligne GitHub</h2>
+      <p class="lede">Le dépôt est déjà initialisé en local (git) avec commits propres. Étapes pour publier :</p>
+      <ul>
+        <li>Me donner ton <b>pseudo GitHub</b> → je remplace <code>NYKARO_GITHUB</code> dans les fichiers.</li>
+        <li>Créer le repo public <code>nykaros-shiny-quest</code> (je peux le faire via <code>gh</code>).</li>
+        <li><code>git push</code> vers GitHub.</li>
+        <li>Pour une <b>release</b> : pousser un tag <code>v1.0.0</code> → la CI compile et publie le jar automatiquement.</li>
+      </ul>
+      <h3 class="sub">CI déjà configurée</h3>
+      <p class="lede"><code>.github/workflows/build.yml</code> : build à chaque push, et création automatique d'une release GitHub (avec le .jar) quand un tag <code>v*</code> est poussé.</p>
+      <div class="callout"><p><b>Licence MIT</b> : ton mod est publiable et réutilisable librement, à ton nom.</p></div>
+    </section>
+  </div>
+
+</div>
+
+<script>
+  (function () {
+    var tabs = document.querySelectorAll('.tabs button');
+    var panels = document.querySelectorAll('.panel');
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        tabs.forEach(function (x) { x.setAttribute('aria-selected', 'false'); });
+        panels.forEach(function (p) { p.classList.remove('on'); });
+        t.setAttribute('aria-selected', 'true');
+        var cible = document.getElementById(t.getAttribute('data-cible'));
+        if (cible) cible.classList.add('on');
+      });
+    });
+    var root = document.documentElement, btn = document.getElementById('themeToggle');
+    if (btn) btn.addEventListener('click', function () {
+      var cur = root.getAttribute('data-theme');
+      var dark = cur ? cur === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      root.setAttribute('data-theme', dark ? 'light' : 'dark');
+    });
+  })();
+</script>
