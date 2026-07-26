@@ -1,0 +1,50 @@
+{
+  "key.categories.nykaroshiny": "Nykaro's Shiny Quest",
+  "key.nykaroshiny.open_quests": "Open Quests",
+
+  "nykaroshiny.gui.title": "Shiny Quests",
+  "nykaroshiny.gui.no_quests": "No quests available",
+  "nykaroshiny.gui.current_odds": "Shiny odds: %s%%",
+  "nykaroshiny.gui.reward": "Reward: %s%% shiny odds",
+  "nykaroshiny.gui.status.active": "Active",
+  "nykaroshiny.gui.status.completed": "Completed",
+  "nykaroshiny.gui.status.locked": "Locked",
+  "nykaroshiny.gui.all_completed": "All quests completed! Shiny odds maxed out.",
+
+  "nykaroshiny.hud.odds": "Shiny: %s%%",
+
+  "nykaroshiny.quest.completed": "Quest completed: %s",
+  "nykaroshiny.quest.tier_up": "New tier reached: %s (shiny odds: %s%%)",
+
+  "nykaroshiny.cmd.odds": "Your current shiny odds: %s%%",
+  "nykaroshiny.cmd.set": "Shiny odds set to %s%% for %s",
+  "nykaroshiny.cmd.reset": "Progression reset for %s",
+  "nykaroshiny.cmd.progress": "Tier %s/%s * %s quest(s) completed * %s%% odds",
+  "nykaroshiny.cmd.players_only": "Only players can use this command.",
+
+  "nykaroshiny.tier.1": "First Steps",
+  "nykaroshiny.tier.2": "Apprentice Trainer",
+  "nykaroshiny.tier.3": "Seasoned Hunter",
+  "nykaroshiny.tier.4": "Cobblemon Expert",
+  "nykaroshiny.tier.5": "Master of the Hunt",
+  "nykaroshiny.tier.6": "Chromatic Legend",
+
+  "nykaroshiny.quest.catch_10": "Catch 10 Pokemon",
+  "nykaroshiny.quest.defeat_15_wild": "Defeat 15 wild Pokemon",
+  "nykaroshiny.quest.reach_level_20": "Level a Pokemon to level 20",
+  "nykaroshiny.quest.catch_5_types": "Catch 5 Pokemon of different types",
+  "nykaroshiny.quest.evolve_3": "Evolve 3 Pokemon",
+  "nykaroshiny.quest.catch_25": "Catch 25 Pokemon",
+  "nykaroshiny.quest.catch_water": "Catch a Water-type Pokemon",
+  "nykaroshiny.quest.catch_fire": "Catch a Fire-type Pokemon",
+  "nykaroshiny.quest.reach_level_50": "Level a Pokemon to level 50",
+  "nykaroshiny.quest.defeat_50_wild": "Defeat 50 wild Pokemon",
+  "nykaroshiny.quest.catch_10_types": "Catch 10 Pokemon of different types",
+  "nykaroshiny.quest.evolve_10": "Evolve 10 Pokemon",
+  "nykaroshiny.quest.catch_first_shiny": "Catch your first shiny Pokemon",
+  "nykaroshiny.quest.reach_level_75": "Level a Pokemon to level 75",
+  "nykaroshiny.quest.catch_100": "Catch 100 Pokemon",
+  "nykaroshiny.quest.catch_all_types": "Catch a Pokemon of all 18 types",
+  "nykaroshiny.quest.catch_legendary": "Catch a legendary Pokemon",
+  "nykaroshiny.quest.reach_level_100": "Level a Pokemon to level 100"
+}

@@ -1,0 +1,31 @@
+# Gradle
+.gradle/
+build/
+out/
+classes/
+
+# Eclipse
+*.launch
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+.settings/
+.classpath
+.project
+
+# Fabric / Loom
+run/
+remappedSrc/
+
+# macOS / OS
+.DS_Store
+
+# Java
+*.class
+hs_err_*.log

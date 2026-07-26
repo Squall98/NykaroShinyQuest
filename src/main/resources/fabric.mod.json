@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "nykaroshiny",
+  "version": "${version}",
+
+  "name": "Nykaro's Shiny Quest",
+  "description": "Augmente progressivement tes chances de Pokemon shiny dans Cobblemon en accomplissant des quetes. Mod original par Nykaro.",
+  "authors": ["Nykaro"],
+  "contact": {
+    "homepage": "https://github.com/NYKARO_GITHUB/nykaros-shiny-quest",
+    "sources": "https://github.com/NYKARO_GITHUB/nykaros-shiny-quest",
+    "issues": "https://github.com/NYKARO_GITHUB/nykaros-shiny-quest/issues"
+  },
+
+  "license": "MIT",
+  "icon": "assets/nykaroshiny/icon/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": ["fr.nykaro.shinyquest.NykaroShinyQuest"],
+    "client": ["fr.nykaro.shinyquest.client.NykaroShinyQuestClient"]
+  },
+
+  "depends": {
+    "fabricloader": ">=0.16.9",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*",
+    "cobblemon": ">=1.6.0"
+  },
+  "suggests": {
+    "fabric-language-kotlin": "*"
+  }
+}

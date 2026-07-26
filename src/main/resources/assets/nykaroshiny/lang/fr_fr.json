@@ -1,0 +1,50 @@
+{
+  "key.categories.nykaroshiny": "Nykaro's Shiny Quest",
+  "key.nykaroshiny.open_quests": "Ouvrir les quêtes",
+
+  "nykaroshiny.gui.title": "Quêtes Shiny",
+  "nykaroshiny.gui.no_quests": "Aucune quête disponible",
+  "nykaroshiny.gui.current_odds": "Chances de shiny : %s%%",
+  "nykaroshiny.gui.reward": "Récompense : %s%% de chances de shiny",
+  "nykaroshiny.gui.status.active": "En cours",
+  "nykaroshiny.gui.status.completed": "Terminée",
+  "nykaroshiny.gui.status.locked": "Verrouillée",
+  "nykaroshiny.gui.all_completed": "Toutes les quêtes sont terminées ! Chances de shiny au maximum.",
+
+  "nykaroshiny.hud.odds": "Shiny : %s%%",
+
+  "nykaroshiny.quest.completed": "Quête terminée : %s",
+  "nykaroshiny.quest.tier_up": "Nouveau palier atteint : %s (chances de shiny : %s%%)",
+
+  "nykaroshiny.cmd.odds": "Tes chances de shiny actuelles : %s%%",
+  "nykaroshiny.cmd.set": "Chances de shiny définies à %s%% pour %s",
+  "nykaroshiny.cmd.reset": "Progression réinitialisée pour %s",
+  "nykaroshiny.cmd.progress": "Palier %s/%s · %s quête(s) terminée(s) · %s%% de chances",
+  "nykaroshiny.cmd.players_only": "Seuls les joueurs peuvent utiliser cette commande.",
+
+  "nykaroshiny.tier.1": "Premiers pas",
+  "nykaroshiny.tier.2": "Apprenti Dresseur",
+  "nykaroshiny.tier.3": "Chasseur aguerri",
+  "nykaroshiny.tier.4": "Expert Cobblemon",
+  "nykaroshiny.tier.5": "Maître de la Chasse",
+  "nykaroshiny.tier.6": "Légende Chromatique",
+
+  "nykaroshiny.quest.catch_10": "Capture 10 Pokémon",
+  "nykaroshiny.quest.defeat_15_wild": "Bats 15 Pokémon sauvages",
+  "nykaroshiny.quest.reach_level_20": "Monte un Pokémon au niveau 20",
+  "nykaroshiny.quest.catch_5_types": "Capture 5 Pokémon de types différents",
+  "nykaroshiny.quest.evolve_3": "Fais évoluer 3 Pokémon",
+  "nykaroshiny.quest.catch_25": "Capture 25 Pokémon",
+  "nykaroshiny.quest.catch_water": "Capture un Pokémon de type Eau",
+  "nykaroshiny.quest.catch_fire": "Capture un Pokémon de type Feu",
+  "nykaroshiny.quest.reach_level_50": "Monte un Pokémon au niveau 50",
+  "nykaroshiny.quest.defeat_50_wild": "Bats 50 Pokémon sauvages",
+  "nykaroshiny.quest.catch_10_types": "Capture 10 Pokémon de types différents",
+  "nykaroshiny.quest.evolve_10": "Fais évoluer 10 Pokémon",
+  "nykaroshiny.quest.catch_first_shiny": "Capture ton premier Pokémon shiny",
+  "nykaroshiny.quest.reach_level_75": "Monte un Pokémon au niveau 75",
+  "nykaroshiny.quest.catch_100": "Capture 100 Pokémon",
+  "nykaroshiny.quest.catch_all_types": "Capture un Pokémon de chacun des 18 types",
+  "nykaroshiny.quest.catch_legendary": "Capture un Pokémon légendaire",
+  "nykaroshiny.quest.reach_level_100": "Monte un Pokémon au niveau 100"
+}
