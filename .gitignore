@@ -29,3 +29,6 @@ remappedSrc/
 # Java
 *.class
 hs_err_*.log
+
+# Exports perso, hors du mod
+discord/
