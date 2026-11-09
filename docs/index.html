@@ -1,94 +1,375 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NykaroShinyQuest</title><style>:root{--fond:#f5f6f8;--surface:#fff;--texte:#1f2328;--doux:#636c76;--bord:#e2e5e9;--accent:#3b6ea8;--t-att:#fbf3e6;--c-att:#9a5b13;--t-ok:#e6f4ea;--c-ok:#1f6b3a}
-@media (prefers-color-scheme:dark){:root{--fond:#16181c;--surface:#1d2025;--texte:#e3e6ea;--doux:#99a1aa;--bord:#2c3037;--accent:#86aee0;--t-att:#33291b;--c-att:#e3b06b;--t-ok:#1d3326;--c-ok:#9ed4ae}}
-*{box-sizing:border-box}body{margin:0;background:var(--fond);color:var(--texte);font:15px/1.6 "Segoe UI",system-ui,sans-serif}
-.page{max-width:1100px;margin:0 auto;padding:32px 24px 60px}h1{font-size:28px;font-weight:600;margin:0}.sous{color:var(--doux);font-size:17px;margin:6px 0 22px}
-nav{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--bord);margin-bottom:18px;position:sticky;top:0;background:var(--fond)}
-nav button{background:none;border:0;border-bottom:2px solid transparent;color:var(--doux);padding:10px 12px;font:inherit;cursor:pointer;margin-bottom:-1px}
-nav button.actif{color:var(--texte);border-bottom-color:var(--accent);font-weight:600}section{display:none}section.actif{display:block}
-.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
-.carte{background:var(--surface);border:1px solid var(--bord);border-radius:10px;padding:16px 20px;margin-bottom:12px}
-.carte h3{margin:0 0 6px;font-size:16px}.ok{background:var(--t-ok)}.ok h3{color:var(--c-ok)}.att{background:var(--t-att)}.att h3{color:var(--c-att)}
-details{background:var(--surface);border:1px solid var(--bord);border-radius:8px;margin-bottom:8px}summary{cursor:pointer;padding:10px 14px;font-weight:600;font-family:Consolas,monospace;font-size:14px}
-details p{margin:0;padding:0 14px 12px;color:var(--doux)}input{width:100%;padding:9px 11px;border:1px solid var(--bord);border-radius:6px;background:var(--surface);color:var(--texte);font:inherit;margin-bottom:10px}
-ol li,ul li{margin:6px 0}code{font-family:Consolas,monospace;font-size:13px;background:var(--fond);padding:1px 5px;border-radius:4px}a{color:var(--accent)}
-.compte{color:var(--doux);font-size:13px;margin-bottom:8px}
-table{border-collapse:collapse;width:100%;margin:8px 0}td,th{border:1px solid var(--bord);padding:6px 9px;text-align:left;vertical-align:top}pre{background:var(--fond);border:1px solid var(--bord);border-radius:6px;padding:10px;overflow:auto}h2,h3,h4{margin:16px 0 6px}</style></head><body><div class="page"><h1>NykaroShinyQuest</h1><p class="sous">Un mod Minecraft (Cobblemon) : tes chances de shiny augmentent au fil des quêtes.</p>
-<nav><button class="actif" data-o="p">Présentation</button><button data-o="i">Installer</button><button data-o="l">Limites</button><button data-o="r">Le README complet</button></nav>
-<section id="p" class="actif"><div class="carte"><h3>Pour qui ?</h3>Les joueurs de Cobblemon qui trouvent la chasse aux shiny trop aléatoire et veulent une progression qui récompense le jeu.</div><div class="grille"><div class='carte ok'><h3>✓</h3>6 paliers de quêtes : capturer, combattre, faire évoluer, monter en niveau…</div><div class='carte ok'><h3>✓</h3>Des chances de shiny qui montent de 2 % jusqu'à 100 % (réglable).</div><div class='carte ok'><h3>✓</h3>Interface des quêtes, affichage des chances en jeu, son et particules à chaque quête.</div><div class='carte ok'><h3>✓</h3>Progression par joueur ou pour tout le serveur, en français et en anglais.</div></div>
-<div class="carte"><h3>Comment ça marche</h3>Mod Fabric pour Minecraft 1.21.1 qui s'appuie sur Cobblemon 1.6+. La configuration est un fichier JSON créé au premier lancement.</div></section>
-<section id="i"><div class="carte"><ol><li>Installer Fabric pour Minecraft 1.21.1.</li><li>Mettre dans <code>mods/</code> : Fabric API, Fabric Language Kotlin, Cobblemon et le <code>.jar</code> du mod (page Releases du dépôt).</li><li>En jeu : touche <b>G</b> pour les quêtes, <code>/shinyquest</code> pour les commandes.</li></ol></div></section>
-<section id="l"><div class="carte att"><h3>À savoir</h3><ul><li>Minecraft 1.21.1 et Cobblemon 1.6+ seulement.</li><li>Licence MIT : libre de le réutiliser.</li></ul></div></section>
-<section id="r"><div class="carte"><h2>✨ Nykaro&#x27;s Shiny Quest</h2>
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nykaro's Shiny Quest — mod Cobblemon</title>
+<meta name="description" content="Un mod Fabric pour Cobblemon : tes chances de rencontrer des Pokémon shiny augmentent au fil des quêtes.">
+<link rel="icon" href="icon.png">
+<style>
+:root{
+  --nuit:#070a1f; --nuit2:#0d1233; --carte:rgba(20,26,66,.72); --bord:rgba(130,160,255,.18);
+  --texte:#e9ecff; --doux:#a7afd6; --cyan:#5ee7ff; --violet:#8b7bff; --or:#ffd25e; --vert:#5fe3a1; --rouge:#ff6b81;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--nuit);color:var(--texte);font:16px/1.6 "Segoe UI",system-ui,-apple-system,sans-serif;overflow-x:hidden}
+canvas#ciel{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.tout{position:relative;z-index:1}
+a{color:var(--cyan)}
+code{font-family:Consolas,"Cascadia Mono",monospace;font-size:.92em;background:rgba(94,231,255,.1);border:1px solid rgba(94,231,255,.2);padding:1px 6px;border-radius:5px}
 
-<p>&gt; Un mod <b>Fabric</b> pour <b>Cobblemon</b> qui augmente progressivement tes chances de rencontrer des Pokémon <b>shiny</b> au fil des quêtes que tu accomplis.</p>
+/* Barre */
+header.barre{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:18px;padding:12px 28px;
+  background:rgba(7,10,31,.75);backdrop-filter:blur(10px);border-bottom:1px solid var(--bord)}
+header.barre img{width:30px;height:30px;border-radius:8px}
+header.barre b{font-weight:700;letter-spacing:.01em}
+header.barre nav{margin-left:auto;display:flex;flex-wrap:wrap;gap:4px}
+header.barre nav a{color:var(--doux);text-decoration:none;padding:6px 10px;border-radius:8px;font-size:14.5px}
+header.barre nav a:hover{color:var(--texte);background:rgba(255,255,255,.06)}
 
-<p>!<a href="https://img.shields.io/badge/Minecraft-1.21.1-brightgreen">Minecraft</a></p>
-<p>!<a href="https://img.shields.io/badge/Loader-Fabric-blue">Loader</a></p>
-<p>!<a href="https://img.shields.io/badge/Requires-Cobblemon%201.6%2B-orange">Requires</a></p>
-<p>!<a href="https://img.shields.io/badge/License-MIT-yellow">License</a></p>
+/* Accueil */
+.hero{min-height:88vh;display:grid;place-items:center;text-align:center;padding:60px 24px 40px}
+.hero .logo{width:150px;height:150px;border-radius:32px;filter:drop-shadow(0 0 30px rgba(94,231,255,.55));animation:flotte 5s ease-in-out infinite}
+@keyframes flotte{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-10px) rotate(8deg)}}
+.hero h1{font-size:clamp(34px,6vw,62px);line-height:1.05;margin:22px 0 10px;font-weight:800;
+  background:linear-gradient(90deg,#fff 0%,var(--cyan) 40%,var(--or) 70%,#fff 100%);background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:reflet 6s linear infinite}
+@keyframes reflet{to{background-position:200% center}}
+.hero p.accroche{font-size:clamp(17px,2.2vw,21px);color:var(--doux);max-width:720px;margin:0 auto 26px}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:28px}
+.badge{font-size:13px;padding:4px 11px;border-radius:999px;border:1px solid var(--bord);background:rgba(255,255,255,.04);color:var(--doux)}
+.boutons{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:12px;font:inherit;font-weight:600;text-decoration:none;cursor:pointer;border:0}
+.btn.principal{background:linear-gradient(135deg,var(--cyan),var(--violet));color:#071026;box-shadow:0 8px 30px rgba(94,231,255,.3)}
+.btn.principal:hover{transform:translateY(-1px)}
+.btn.second{background:rgba(255,255,255,.06);color:var(--texte);border:1px solid var(--bord)}
+.defiler{margin-top:46px;color:var(--doux);font-size:14px;animation:clignote 2.4s ease-in-out infinite}
+@keyframes clignote{50%{opacity:.4}}
 
+/* Sections */
+section{max-width:1180px;margin:0 auto;padding:70px 24px}
+section h2{font-size:clamp(26px,3.5vw,36px);margin:0 0 8px;font-weight:750}
+section .intro{color:var(--doux);max-width:760px;margin:0 0 30px;font-size:17px}
+.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.carte{background:var(--carte);border:1px solid var(--bord);border-radius:16px;padding:22px;backdrop-filter:blur(6px)}
+.carte .ico{font-size:30px;line-height:1;margin-bottom:12px}
+.carte h3{margin:0 0 6px;font-size:18px}
+.carte p{margin:0;color:var(--doux)}
 
+/* Démo des quêtes (façon écran du jeu) */
+.demo{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px;align-items:start}
+.ecran{background:#c6c6c6;border:4px solid #fff;border-right-color:#555;border-bottom-color:#555;border-radius:4px;padding:14px;color:#3f3f3f;
+  font-family:"Minecraftia","Segoe UI",system-ui,sans-serif;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.ecran .titre{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.ecran .titre b{font-size:18px;color:#3f3f3f}
+.ecran .titre span{font-size:14px;color:#555}
+.paliers{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:12px}
+.palier{border:2px solid #8b8b8b;background:#8b8b8b;color:#fff;border-radius:3px;padding:6px 2px;text-align:center;font-size:12px;cursor:pointer;user-select:none}
+.palier.fait{background:#4a9b5e;border-color:#2e6b3d}
+.palier.actuel{background:#5b6ee1;border-color:#3946a3;box-shadow:0 0 0 2px #fff inset}
+.palier.verrou{opacity:.55;cursor:not-allowed}
+.palier small{display:block;opacity:.9}
+.nom-palier{font-weight:700;margin:4px 0 8px;color:#2b2b2b}
+.quete{display:flex;align-items:center;gap:10px;background:#8b8b8b;color:#fff;border:2px solid #373737;border-top-color:#a8a8a8;border-left-color:#a8a8a8;
+  padding:9px 10px;margin-bottom:6px;cursor:pointer;transition:filter .15s}
+.quete:hover{filter:brightness(1.12)}
+.quete .case{width:18px;height:18px;border:2px solid #fff;display:grid;place-items:center;font-size:13px;flex:none}
+.quete.ok{background:#4a9b5e}
+.quete.ok .case{background:#fff;color:#2e6b3d}
+.quete .statut{margin-left:auto;font-size:12px;opacity:.9}
+.recompense{margin-top:10px;font-size:14px;color:#2b2b2b}
+.ecran .bas{display:flex;gap:8px;margin-top:12px}
+.ecran button{font:inherit;font-size:13px;background:#8b8b8b;color:#fff;border:2px solid #373737;border-top-color:#a8a8a8;border-left-color:#a8a8a8;padding:6px 10px;cursor:pointer}
+.ecran button:hover{background:#9b9bd8}
+.jauge{background:var(--carte);border:1px solid var(--bord);border-radius:16px;padding:22px}
+.jauge .chiffre{font-size:54px;font-weight:800;line-height:1;color:var(--or);text-shadow:0 0 24px rgba(255,210,94,.45)}
+.jauge .chiffre small{font-size:22px;color:var(--doux);font-weight:600}
+.barre-shiny{height:14px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;margin:16px 0 8px}
+.barre-shiny i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--violet),var(--or));border-radius:999px;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.hud{display:inline-block;margin-top:14px;font-family:Consolas,monospace;font-size:14px;background:rgba(0,0,0,.55);color:#fff;padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,.2)}
+.hud b{color:var(--or)}
+.compare{color:var(--doux);font-size:14.5px;margin-top:10px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(120px);background:#1b2154;border:1px solid var(--or);color:#fff;
+  padding:12px 20px;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.5);transition:transform .35s;z-index:9;font-weight:600}
+.toast.vu{transform:translateX(-50%) translateY(0)}
 
-<h3>🎯 Le concept</h3>
+/* Simulateur de spawns */
+.simu .controle{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:18px}
+.simu select{font:inherit;background:var(--nuit2);color:var(--texte);border:1px solid var(--bord);border-radius:10px;padding:10px 12px}
+.herbes{display:grid;grid-template-columns:repeat(auto-fill,minmax(54px,1fr));gap:8px;min-height:140px;background:linear-gradient(180deg,rgba(40,120,80,.2),rgba(20,60,40,.35));
+  border:1px solid rgba(95,227,161,.25);border-radius:16px;padding:14px}
+.pkm{aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-size:24px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
+  animation:pop .35s both}
+.pkm.shiny{background:radial-gradient(circle,rgba(255,210,94,.55),rgba(255,210,94,.05) 70%);border-color:var(--or);box-shadow:0 0 18px rgba(255,210,94,.6);position:relative}
+.pkm.shiny::after{content:"✦";position:absolute;top:-6px;right:-2px;color:var(--or);font-size:16px;animation:brille 1s ease-in-out infinite}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes brille{50%{transform:scale(1.5) rotate(20deg);opacity:.6}}
+.bilan{margin-top:14px;color:var(--doux)}
+.bilan b{color:var(--or)}
 
-<p>Au début, tes chances de shiny sont normales. En accomplissant des <b>quêtes</b></p>
-<p>(capturer, combattre, faire évoluer, monter en niveau…), tu débloques des</p>
-<p><b>paliers</b> qui augmentent tes chances de shiny — jusqu&#x27;à <b>100 %</b> pour les</p>
-<p>dresseurs les plus accomplis.</p>
+/* Réglages */
+.reglages{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.curseur{margin-bottom:14px}
+.curseur label{display:flex;justify-content:space-between;font-size:14.5px;color:var(--doux)}
+.curseur label b{color:var(--texte)}
+input[type=range]{width:100%;accent-color:var(--cyan)}
+.option{display:flex;align-items:center;gap:10px;margin:8px 0;color:var(--doux);cursor:pointer}
+.option input{accent-color:var(--cyan);width:18px;height:18px}
+pre.json{margin:0;background:#050817;border:1px solid var(--bord);border-radius:14px;padding:18px;overflow:auto;font:13.5px/1.55 Consolas,monospace;color:#cfe4ff;min-height:100%}
+.json .k{color:var(--cyan)} .json .n{color:var(--or)} .json .b{color:var(--vert)}
+.copier{float:right;font:inherit;font-size:13px;background:rgba(94,231,255,.12);color:var(--cyan);border:1px solid rgba(94,231,255,.35);border-radius:8px;padding:5px 10px;cursor:pointer}
 
-<table><tr><th>Palier</th><th>Nom</th><th>Chances de shiny</th></tr><tr><td>1</td><td>Premiers pas</td><td>2 %</td></tr><tr><td>2</td><td>Apprenti Dresseur</td><td>5 %</td></tr><tr><td>3</td><td>Chasseur aguerri</td><td>10 %</td></tr><tr><td>4</td><td>Expert Cobblemon</td><td>25 %</td></tr><tr><td>5</td><td>Maître de la Chasse</td><td>50 %</td></tr><tr><td>6</td><td>Légende Chromatique</td><td>100 %</td></tr></table>
+/* Installation */
+.etapes{counter-reset:e;display:grid;gap:12px}
+.etape{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;background:var(--carte);border:1px solid var(--bord);border-radius:16px;padding:18px}
+.etape::before{counter-increment:e;content:counter(e);width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:20px;
+  background:linear-gradient(135deg,var(--cyan),var(--violet));color:#071026}
+.etape h3{margin:2px 0 6px;font-size:17px}
+.etape p{margin:0;color:var(--doux)}
+.prerequis{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.prerequis a{font-size:13.5px;text-decoration:none;padding:5px 11px;border-radius:999px;background:rgba(94,231,255,.1);border:1px solid rgba(94,231,255,.25)}
 
-<p>*(Valeurs entièrement configurables.)*</p>
+table.cmd{width:100%;border-collapse:collapse;background:var(--carte);border:1px solid var(--bord);border-radius:16px;overflow:hidden}
+table.cmd td,table.cmd th{padding:12px 16px;border-bottom:1px solid var(--bord);text-align:left;vertical-align:top}
+table.cmd th{color:var(--doux);font-weight:600;font-size:14px}
+table.cmd tr:last-child td{border-bottom:0}
+.admin{font-size:12px;color:var(--rouge);border:1px solid rgba(255,107,129,.4);border-radius:999px;padding:1px 8px;margin-left:6px;white-space:nowrap}
 
-<h3>✨ Fonctionnalités</h3>
+footer{text-align:center;color:var(--doux);padding:50px 24px 70px;border-top:1px solid var(--bord)}
+footer a{margin:0 8px}
 
-<li>📜 <b>Quêtes progressives</b> réparties en 6 paliers.</li>
-<li>👤 <b>Progression par joueur</b> (ou globale au serveur, au choix).</li>
-<li>⚙️ <b>Configuration JSON</b> : courbe de chances, objectifs, options.</li>
-<li>🖥️ <b>Interface graphique</b> des quêtes (raccourci clavier).</li>
-<li>📊 <b>HUD</b> affichant tes chances de shiny en jeu.</li>
-<li>🔊 <b>Feedback</b> : son + particules à chaque quête terminée.</li>
-<li>💬 <b>Commandes</b> : <code>/shinyquest odds | progress | set | reset</code>.</li>
-<li>🌍 Traductions <b>français</b> et <b>anglais</b>.</li>
+@media (max-width:860px){.demo,.reglages{grid-template-columns:1fr}header.barre nav{display:none}.paliers{grid-template-columns:repeat(3,1fr)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="ciel"></canvas>
+<div class="tout">
 
-<h3>📦 Prérequis</h3>
+<header class="barre">
+  <img src="icon.png" alt=""><b>Nykaro's Shiny Quest</b>
+  <nav><a href="#principe">Le principe</a><a href="#demo">Essaie-le</a><a href="#simulateur">Simulateur</a><a href="#reglages">Réglages</a><a href="#installer">Installer</a><a href="#commandes">Commandes</a></nav>
+</header>
 
-<li>Minecraft <b>1.21.1</b></li>
-<li><a href="https://fabricmc.net/">Fabric Loader</a> <b>0.16.9+</b></li>
-<li><a href="https://modrinth.com/mod/fabric-api">Fabric API</a></li>
-<li><a href="https://modrinth.com/mod/cobblemon">Cobblemon</a> <b>1.6+</b></li>
-<li><a href="https://modrinth.com/mod/fabric-language-kotlin">Fabric Language Kotlin</a> *(requis par Cobblemon)*</li>
+<div class="hero">
+  <div>
+    <img class="logo" src="icon.png" alt="Icône du mod">
+    <h1>Nykaro's Shiny Quest</h1>
+    <p class="accroche">Un mod <b>Cobblemon</b> où tes chances de rencontrer un Pokémon <b>shiny</b> grandissent au fil de tes quêtes. Joue, progresse, et les shiny finissent par venir à toi.</p>
+    <div class="badges"><span class="badge">Minecraft 1.21.1</span><span class="badge">Fabric</span><span class="badge">Cobblemon 1.6+</span><span class="badge">Français · English</span><span class="badge">Licence MIT</span></div>
+    <div class="boutons">
+      <a class="btn principal" href="https://github.com/Squall98/NykaroShinyQuest/releases/latest">⬇ Télécharger le mod</a>
+      <a class="btn second" href="#demo">✨ Essayer la démo</a>
+    </div>
+    <div class="defiler">▼ défile pour découvrir</div>
+  </div>
+</div>
 
-<h3>🚀 Installation</h3>
+<section id="principe">
+  <h2>Le principe</h2>
+  <p class="intro">Dans Cobblemon, un shiny tombe à peu près une fois sur 8 192 rencontres. Ici, ta progression compte : chaque palier de quêtes terminé fait grimper tes chances, jusqu'à 100 % pour les dresseurs les plus accomplis.</p>
+  <div class="grille">
+    <div class="carte"><div class="ico">📜</div><h3>18 quêtes, 6 paliers</h3><p>Capturer, combattre, faire évoluer, monter en niveau : des objectifs qui suivent ta façon de jouer.</p></div>
+    <div class="carte"><div class="ico">✨</div><h3>De 2 % à 100 %</h3><p>Chaque palier débloque de nouvelles chances de shiny. Toute la courbe se règle dans un fichier.</p></div>
+    <div class="carte"><div class="ico">🎮</div><h3>Pensé pour le jeu</h3><p>Écran des quêtes (touche <b>G</b>), chances affichées à l'écran, son et particules à chaque quête réussie.</p></div>
+    <div class="carte"><div class="ico">🌍</div><h3>Solo ou serveur</h3><p>Progression propre à chaque joueur, ou commune à tout le serveur. En français et en anglais.</p></div>
+  </div>
+</section>
 
-<li>Installe Fabric pour Minecraft 1.21.1.</li>
-<li>Place dans ton dossier <code>mods/</code> : Fabric API, Fabric Language Kotlin, Cobblemon,</li>
-<p>   et <code>nykaros-shiny-quest-x.y.z.jar</code>.</p>
-<li>Lance le jeu, ouvre le menu des quêtes avec le raccourci (par défaut <b>G</b>).</li>
+<section id="demo">
+  <h2>Essaie-le</h2>
+  <p class="intro">Voilà l'écran des quêtes, comme dans le jeu. <b>Clique sur une quête</b> pour la terminer : quand les trois sont faites, tu passes au palier suivant et tes chances montent.</p>
+  <div class="demo">
+    <div class="ecran" aria-label="Écran des quêtes">
+      <div class="titre"><b>Quêtes Shiny</b><span id="ecran-chances">Chances de shiny : 0 %</span></div>
+      <div class="paliers" id="paliers"></div>
+      <div class="nom-palier" id="nom-palier"></div>
+      <div id="quetes"></div>
+      <div class="recompense" id="recompense"></div>
+      <div class="bas"><button id="tout-finir">Terminer ce palier</button><button id="recommencer">Recommencer</button></div>
+    </div>
+    <div class="jauge">
+      <div style="color:var(--doux);font-size:14px">Tes chances de shiny</div>
+      <div class="chiffre" id="chiffre">0<small> %</small></div>
+      <div class="barre-shiny"><i id="barre"></i></div>
+      <div class="compare" id="compare">Sans quête : environ 1 chance sur 8 192, comme dans Cobblemon.</div>
+      <div class="hud">Shiny : <b id="hud">0%</b></div>
+      <div class="compare">↑ Le petit affichage que tu vois en jeu.</div>
+    </div>
+  </div>
+</section>
 
-<h3>⚙️ Configuration</h3>
+<section id="simulateur" class="simu">
+  <h2>Simulateur de rencontres</h2>
+  <p class="intro">Choisis un palier et lance 60 rencontres : tu vois tout de suite la différence.</p>
+  <div class="controle">
+    <select id="simu-palier"></select>
+    <button class="btn principal" id="lancer">🌿 Lancer 60 rencontres</button>
+  </div>
+  <div class="herbes" id="herbes"></div>
+  <div class="bilan" id="bilan">Lance une première série !</div>
+</section>
 
-<p>Le fichier <code>config/nykaroshiny.json</code> est généré au premier lancement.</p>
-<p>Tu peux y régler la courbe de chances, les objectifs des quêtes, la</p>
-<p>progression par joueur, l&#x27;affichage du HUD et le feedback.</p>
+<section id="reglages">
+  <h2>Règle-le à ton goût</h2>
+  <p class="intro">Au premier lancement, le mod crée <code>config/nykaroshiny.json</code>. Joue avec les curseurs : le fichier se met à jour à droite, prêt à copier.</p>
+  <div class="reglages">
+    <div class="carte" id="curseurs"></div>
+    <pre class="json" id="json"></pre>
+  </div>
+</section>
 
-<h3>🛠️ Compilation depuis les sources</h3>
+<section id="installer">
+  <h2>Installer</h2>
+  <p class="intro">Cinq minutes, et c'est parti.</p>
+  <div class="etapes">
+    <div class="etape"><div><h3>Installe Fabric pour Minecraft 1.21.1</h3><p>Avec l'installeur officiel de Fabric (Loader 0.16.9 ou plus récent).</p>
+      <div class="prerequis"><a href="https://fabricmc.net/use/installer/">Fabric Loader</a></div></div></div>
+    <div class="etape"><div><h3>Ajoute les mods nécessaires</h3><p>Dans ton dossier <code>mods/</code> :</p>
+      <div class="prerequis"><a href="https://modrinth.com/mod/fabric-api">Fabric API</a><a href="https://modrinth.com/mod/fabric-language-kotlin">Fabric Language Kotlin</a><a href="https://modrinth.com/mod/cobblemon">Cobblemon 1.6+</a></div></div></div>
+    <div class="etape"><div><h3>Ajoute Shiny Quest</h3><p>Télécharge <code>nykaros-shiny-quest-1.0.0.jar</code> et mets-le dans <code>mods/</code>, à côté des autres.</p>
+      <div class="prerequis"><a href="https://github.com/Squall98/NykaroShinyQuest/releases/latest">⬇ Télécharger</a></div></div></div>
+    <div class="etape"><div><h3>Lance le jeu</h3><p>Appuie sur <b>G</b> pour ouvrir tes quêtes. Bonne chasse !</p></div></div>
+  </div>
+</section>
 
-<pre>
-git clone https://github.com/NYKARO_GITHUB/nykaros-shiny-quest.git
-cd nykaros-shiny-quest
-./gradlew build
-</pre>
+<section id="commandes">
+  <h2>Commandes</h2>
+  <p class="intro">Pour suivre ta progression, et pour les administrateurs d'un serveur.</p>
+  <table class="cmd">
+    <tr><th>Commande</th><th>Ce qu'elle fait</th></tr>
+    <tr><td><code>/shinyquest odds</code></td><td>Affiche tes chances de shiny actuelles.</td></tr>
+    <tr><td><code>/shinyquest progress</code></td><td>Ton palier, tes quêtes terminées et tes chances.</td></tr>
+    <tr><td><code>/shinyquest set &lt;joueurs&gt; &lt;valeur&gt;</code><span class="admin">admin</span></td><td>Fixe les chances de shiny (0 à 100 %) des joueurs choisis.</td></tr>
+    <tr><td><code>/shinyquest reset &lt;joueurs&gt;</code><span class="admin">admin</span></td><td>Remet la progression des joueurs choisis à zéro.</td></tr>
+  </table>
+</section>
 
-<p>Le jar final se trouve dans <code>build/libs/</code>.</p>
+<footer>
+  <img src="icon.png" alt="" width="40" height="40"><br>
+  Nykaro's Shiny Quest · mod Fabric pour Cobblemon · licence MIT<br>
+  <a href="https://github.com/Squall98/NykaroShinyQuest">Code source</a><a href="https://github.com/Squall98/NykaroShinyQuest/releases">Versions</a><a href="https://github.com/Squall98/NykaroShinyQuest/blob/main/CHANGELOG.md">Nouveautés</a>
+</footer>
+</div>
+<div class="toast" id="toast"></div>
 
-<h3>📄 Licence</h3>
+<script>
+// ---- Les vraies données du mod (QuestRegistry.java et fr_fr.json) ----
+const PALIERS = [
+  { nom: "Premiers pas", chances: 2, quetes: ["Capture 10 Pokémon", "Bats 15 Pokémon sauvages", "Monte un Pokémon au niveau 20"] },
+  { nom: "Apprenti Dresseur", chances: 5, quetes: ["Capture 5 Pokémon de types différents", "Fais évoluer 3 Pokémon", "Capture 25 Pokémon"] },
+  { nom: "Chasseur aguerri", chances: 10, quetes: ["Capture un Pokémon de type Eau", "Capture un Pokémon de type Feu", "Monte un Pokémon au niveau 50"] },
+  { nom: "Expert Cobblemon", chances: 25, quetes: ["Bats 50 Pokémon sauvages", "Capture 10 Pokémon de types différents", "Fais évoluer 10 Pokémon"] },
+  { nom: "Maître de la Chasse", chances: 50, quetes: ["Capture ton premier Pokémon shiny", "Monte un Pokémon au niveau 75", "Capture 100 Pokémon"] },
+  { nom: "Légende Chromatique", chances: 100, quetes: ["Capture un Pokémon de chacun des 18 types", "Capture un Pokémon légendaire", "Monte un Pokémon au niveau 100"] },
+];
+const BASE = 100 / 8192;   // la chance normale de Cobblemon, en %
+const $ = s => document.querySelector(s);
 
-<p>Distribué sous licence [MIT](LICENSE) © 2026 Nykaro.</p>
+// ---- Ciel étoilé ----
+(() => {
+  const c = $("#ciel"), x = c.getContext("2d"); let etoiles = [];
+  const taille = () => { c.width = innerWidth * devicePixelRatio; c.height = innerHeight * devicePixelRatio;
+    etoiles = Array.from({ length: Math.round(innerWidth * innerHeight / 5000) }, () => ({ x: Math.random() * c.width, y: Math.random() * c.height,
+      r: Math.random() * 1.4 + .3, v: Math.random() * .02 + .005, p: Math.random() * 6.3, d: Math.random() * .15 + .03 })); };
+  taille(); addEventListener("resize", taille);
+  const anime = matchMedia("(prefers-reduced-motion: reduce)").matches ? false : true;
+  const dessin = t => {
+    x.clearRect(0, 0, c.width, c.height);
+    const g = x.createRadialGradient(c.width * .5, c.height * .2, 0, c.width * .5, c.height * .2, c.width * .7);
+    g.addColorStop(0, "rgba(80,60,200,.25)"); g.addColorStop(1, "rgba(7,10,31,0)"); x.fillStyle = g; x.fillRect(0, 0, c.width, c.height);
+    for (const e of etoiles) { const a = .45 + .55 * Math.sin(e.p + t * e.v * .06); x.globalAlpha = a; x.fillStyle = a > .9 ? "#ffe9a8" : "#cfe4ff";
+      x.beginPath(); x.arc(e.x, e.y, e.r * devicePixelRatio, 0, 6.3); x.fill(); if (anime) { e.y += e.d; if (e.y > c.height) e.y = 0; } }
+    x.globalAlpha = 1; if (anime) requestAnimationFrame(dessin);
+  };
+  requestAnimationFrame(dessin);
+})();
 
-<p>&gt; Mod <b>original</b>, écrit intégralement par Nykaro. Non affilié à Cobblemon.</p>
-</div></section>
-<script>document.querySelector("nav").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
-document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("actif",x===b));
-document.querySelectorAll("section").forEach(s=>s.classList.toggle("actif",s.id===b.dataset.o));window.scrollTo(0,0);});</script></div></body></html>
+// ---- Démo de l'écran des quêtes ----
+let palier = 0, faites = [false, false, false], chances = 0;
+const toast = m => { const t = $("#toast"); t.textContent = m; t.classList.add("vu"); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove("vu"), 2600); };
+function afficherChances() {
+  $("#chiffre").innerHTML = chances + "<small> %</small>";
+  $("#hud").textContent = chances + "%";
+  $("#ecran-chances").textContent = "Chances de shiny : " + chances + " %";
+  $("#barre").style.width = chances + "%";
+  $("#compare").textContent = chances === 0 ? "Sans quête : environ 1 chance sur 8 192, comme dans Cobblemon."
+    : chances >= 100 ? "Chaque rencontre est un shiny. Légende !"
+    : `Environ ${Math.round(chances / BASE).toLocaleString("fr-FR")} fois plus de chances que dans Cobblemon de base.`;
+}
+function dessiner() {
+  $("#paliers").innerHTML = PALIERS.map((p, i) => `<div class="palier ${i < palier ? "fait" : i === palier ? "actuel" : "verrou"}" data-i="${i}">${i + 1}<small>${p.chances} %</small></div>`).join("");
+  if (palier >= PALIERS.length) {
+    $("#nom-palier").textContent = "Toutes les quêtes sont terminées ! Chances de shiny au maximum.";
+    $("#quetes").innerHTML = ""; $("#recompense").textContent = ""; return;
+  }
+  const p = PALIERS[palier];
+  $("#nom-palier").textContent = `Palier ${palier + 1} · ${p.nom}`;
+  $("#quetes").innerHTML = p.quetes.map((q, i) => `<div class="quete ${faites[i] ? "ok" : ""}" data-q="${i}"><span class="case">${faites[i] ? "✓" : ""}</span>${q}<span class="statut">${faites[i] ? "Terminée" : "En cours"}</span></div>`).join("");
+  $("#recompense").textContent = `Récompense : ${p.chances} % de chances de shiny`;
+}
+function finirQuete(i) {
+  if (palier >= PALIERS.length || faites[i]) return;
+  faites[i] = true; toast("Quête terminée : " + PALIERS[palier].quetes[i]);
+  if (faites.every(Boolean)) {
+    chances = PALIERS[palier].chances; const nom = PALIERS[palier].nom; palier++; faites = [false, false, false];
+    setTimeout(() => toast(`Nouveau palier atteint : ${nom} (chances de shiny : ${chances} %)`), 700);
+    eclat();
+  }
+  dessiner(); afficherChances();
+}
+$("#quetes").addEventListener("click", e => { const q = e.target.closest(".quete"); if (q) finirQuete(+q.dataset.q); });
+$("#tout-finir").addEventListener("click", () => { [0, 1, 2].forEach((i, n) => setTimeout(() => finirQuete(i), n * 250)); });
+$("#recommencer").addEventListener("click", () => { palier = 0; faites = [false, false, false]; chances = 0; dessiner(); afficherChances(); });
+function eclat() {
+  const z = $(".jauge").getBoundingClientRect();
+  for (let k = 0; k < 18; k++) { const s = document.createElement("span"); s.textContent = "✦";
+    Object.assign(s.style, { position: "fixed", left: z.left + z.width / 2 + "px", top: z.top + 60 + "px", color: k % 2 ? "#ffd25e" : "#5ee7ff", fontSize: 14 + Math.random() * 14 + "px",
+      pointerEvents: "none", zIndex: 8, transition: "transform 1s ease-out, opacity 1s" });
+    document.body.appendChild(s); const a = Math.random() * 6.3, d = 60 + Math.random() * 90;
+    requestAnimationFrame(() => { s.style.transform = `translate(${Math.cos(a) * d}px,${Math.sin(a) * d}px) rotate(${a * 60}deg)`; s.style.opacity = 0; });
+    setTimeout(() => s.remove(), 1100); }
+}
+dessiner(); afficherChances();
+
+// ---- Simulateur de rencontres ----
+const CREATURES = ["🐉", "🦊", "🐢", "🐦", "🐟", "🐛", "🐭", "🦇", "🐸", "🐍", "🦋", "🐻", "🐺", "🦉", "🐙", "🌱", "🔥", "💧"];
+$("#simu-palier").innerHTML = `<option value="${BASE}">Sans quête (Cobblemon de base)</option>` + PALIERS.map((p, i) => `<option value="${p.chances}">Palier ${i + 1} · ${p.nom} (${p.chances} %)</option>`).join("");
+$("#simu-palier").value = 10;
+$("#lancer").addEventListener("click", () => {
+  const taux = +$("#simu-palier").value / 100; let n = 0;
+  $("#herbes").innerHTML = Array.from({ length: 60 }, (_, i) => { const shiny = Math.random() < taux; if (shiny) n++;
+    return `<div class="pkm ${shiny ? "shiny" : ""}" style="animation-delay:${i * 18}ms" title="${shiny ? "Shiny !" : "Normal"}">${CREATURES[Math.floor(Math.random() * CREATURES.length)]}</div>`; }).join("");
+  $("#bilan").innerHTML = n ? `<b>${n} shiny</b> sur 60 rencontres ✨` : "Aucun shiny cette fois… Monte de palier !";
+});
+
+// ---- Réglages : curseurs → fichier de config ----
+const conf = { oddsPerTier: PALIERS.map(p => p.chances), globalOddsMultiplier: 1, perPlayerProgression: true, showHud: true, enableFeedback: true, targetOverrides: {} };
+function curseurs() {
+  $("#curseurs").innerHTML = PALIERS.map((p, i) => `<div class="curseur"><label>Palier ${i + 1} · ${p.nom}<b id="v${i}">${conf.oddsPerTier[i]} %</b></label><input type="range" min="0" max="100" step="1" value="${conf.oddsPerTier[i]}" data-i="${i}"></div>`).join("")
+    + `<div class="curseur"><label>Multiplicateur global<b id="vm">× ${conf.globalOddsMultiplier}</b></label><input type="range" min="0.1" max="3" step="0.1" value="1" id="mult"></div>`
+    + `<label class="option"><input type="checkbox" id="parjoueur" checked> Progression propre à chaque joueur</label>`
+    + `<label class="option"><input type="checkbox" id="hudok" checked> Afficher les chances à l'écran</label>`
+    + `<label class="option"><input type="checkbox" id="feedok" checked> Son et particules</label>`;
+}
+function json() {
+  const s = JSON.stringify(conf, null, 2).replace(/"(\w+)":/g, '<span class="k">"$1"</span>:').replace(/: (\d+(?:\.\d+)?)/g, ': <span class="n">$1</span>')
+    .replace(/(\[|, |\n\s+)(\d+(?:\.\d+)?)(?=[,\n\]])/g, '$1<span class="n">$2</span>').replace(/: (true|false)/g, ': <span class="b">$1</span>');
+  $("#json").innerHTML = `<button class="copier" id="copier">Copier</button>` + s;
+}
+curseurs(); json();
+$("#curseurs").addEventListener("input", e => {
+  const t = e.target;
+  if (t.dataset.i) { conf.oddsPerTier[+t.dataset.i] = +t.value; $("#v" + t.dataset.i).textContent = t.value + " %"; }
+  if (t.id === "mult") { conf.globalOddsMultiplier = +(+t.value).toFixed(1); $("#vm").textContent = "× " + conf.globalOddsMultiplier; }
+  if (t.id === "parjoueur") conf.perPlayerProgression = t.checked;
+  if (t.id === "hudok") conf.showHud = t.checked;
+  if (t.id === "feedok") conf.enableFeedback = t.checked;
+  json();
+});
+$("#json").addEventListener("click", e => { if (e.target.id !== "copier") return;
+  navigator.clipboard?.writeText(JSON.stringify(conf, null, 2)).then(() => toast("Configuration copiée")).catch(() => toast("Copie impossible ici")); });
+</script>
+</body>
+</html>
