@@ -1,5 +1,8 @@
 # ✨ Nykaro's Shiny Quest
 
+📖 **Présentation illustrée** : https://squall98.github.io/NykaroShinyQuest/ (aussi dans `docs/index.html`)
+
+
 > Un mod **Fabric** pour **Cobblemon** qui augmente progressivement tes chances de rencontrer des Pokémon **shiny** au fil des quêtes que tu accomplis.
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-brightgreen)
